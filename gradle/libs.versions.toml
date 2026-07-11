@@ -1,0 +1,33 @@
+[versions]
+a12BaseVersion = "30.0.1"
+commonsLang3Version = "3.20.0"
+lombokPluginVersion = "8.14"
+lombokVersion = "1.18.42"
+springVersion = "7.0.7"
+springbootVersion = "4.0.6"
+testngVersion = "7.12.0"
+verPluginVersion = "0.52.0"
+picocliVersion = "4.7.7"
+semver4jVersion = "3.1.0" # added
+mockitoVersion = "5.21.0"
+spotlessPluginVersion = "8.2.1"
+
+[libraries]
+commonsLang3 = { group = "org.apache.commons", name = "commons-lang3", version.ref = "commonsLang3Version" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombokVersion" }
+mgmModelApi = { module = "com.mgmtp.a12.base:base-model-api", version.ref = "a12BaseVersion" }
+spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter", version.ref = "springbootVersion" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "springbootVersion" }
+springContext = { module = "org.springframework:spring-context", version.ref = "springVersion" }
+testng = { module = "org.testng:testng", version.ref = "testngVersion" }
+picocli = { module = "info.picocli:picocli", version.ref = "picocliVersion" }
+semver4j = { module = "com.vdurmont:semver4j", version.ref = "semver4jVersion" } # added
+mockito = { module = "org.mockito:mockito-core", version.ref = "mockitoVersion" }
+
+[plugins]
+a12Publish = "com.mgmtp.a12.bd.artifact-publish:0.4.2"
+catalogUpdatePlugin = "nl.littlerobots.version-catalog-update:1.0.0"
+lombokPlugin = { id = "io.freefair.lombok", version.ref = "lombokPluginVersion" }
+verPlugin = { id = "com.github.ben-manes.versions", version.ref = "verPluginVersion" }
+springBoot = { id = "org.springframework.boot", version.ref = "springbootVersion" }
+spotlessPlugin = { id = "com.diffplug.spotless", version.ref = "spotlessPluginVersion" }

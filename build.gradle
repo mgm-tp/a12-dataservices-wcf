@@ -1,0 +1,57 @@
+plugins {
+	alias libs.plugins.lombokPlugin apply false
+	alias libs.plugins.verPlugin
+	alias libs.plugins.catalogUpdatePlugin
+	alias libs.plugins.spotlessPlugin
+	alias libs.plugins.a12Publish
+}
+
+allprojects { Project subProject ->
+	subProject.apply plugin: project.libs.plugins.a12Publish.get().pluginId
+	subProject.afterEvaluate {
+		subProject.extensions.findByType(JavaPluginExtension)?.with {
+			sourceCompatibility = JavaVersion.VERSION_21
+			targetCompatibility = JavaVersion.VERSION_21
+
+			subProject.with {
+				pluginManager.apply(libs.plugins.lombokPlugin.get().pluginId)
+			}
+		}
+
+		// LICENSE and NOTICE are bundled into every JAR from the repo root.
+		subProject.tasks.withType(Jar).configureEach {
+			from(rootProject.files('LICENSE', 'NOTICE')) {
+				into 'META-INF'
+			}
+		}
+		// The plain JAR bundles the repo-root THIRD_PARTY_NOTICES and license texts.
+		subProject.tasks.matching { it.name == 'jar' }.configureEach {
+			from(rootProject.file('THIRD_PARTY_NOTICES')) {
+				into 'META-INF'
+			}
+			from(rootProject.file('licenses')) {
+				into 'META-INF/licenses'
+			}
+		}
+	}
+}
+
+subprojects {
+	apply plugin: "com.diffplug.spotless"
+
+	spotless {
+		java {
+			target "**/*.java"
+			targetExclude(
+					"**/build/**",
+					"**/.*/**"
+			)
+			licenseHeaderFile(rootProject.file("license_header.txt"))
+		}
+	}
+}
+
+tasks.register('setVersion', Exec) {
+	executable 'sed'
+	args '-i', "s/^ *version *= *.*\$/version=${version}/", 'gradle.properties'
+}

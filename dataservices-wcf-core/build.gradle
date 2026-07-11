@@ -1,0 +1,72 @@
+plugins {
+	id 'java-library'
+	id 'maven-publish'
+}
+
+dependencies {
+	api project(':dataservices-wcf-api')
+	implementation libs.spring.boot.starter
+
+	testImplementation libs.testng
+	testImplementation libs.mockito
+	testImplementation libs.spring.boot.starter.test
+}
+
+tasks.register('testConvertersJar', Jar) {
+	group = 'build'
+	description = 'Assembles a self-contained (fat) JAR with test WorkspaceConverter implementations and required external deps.'
+	archiveBaseName.set(project.name)
+	archiveClassifier.set('converters')
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	dependsOn tasks.testClasses
+
+	from sourceSets.test.output
+	include 'com/mgmtp/a12/dataservices/wcf/it/converters/**'
+	include 'com/mgmtp/a12/dataservices/wcf/it/ModelUtils.class'
+
+	from {
+		def apiPrefix = project(':dataservices-wcf-api').name + '-'
+		def corePrefix = project.name + '-'
+		configurations.testRuntimeClasspath
+				.filter { it.name.endsWith('.jar') && !it.name.startsWith(apiPrefix) && !it.name.startsWith(corePrefix) }
+				.collect { zipTree(it) }
+	}
+
+	exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA'
+
+	manifest {
+		attributes(
+				'Implementation-Title': 'Test Converters',
+				'Implementation-Version': project.version,
+				'Created-By': 'Gradle',
+		)
+	}
+}
+
+// Expose the test converters fat-jar so sibling modules (e.g. the CLI) can exercise converter loading.
+configurations {
+	convertersJar {
+		canBeConsumed = true
+		canBeResolved = false
+	}
+}
+
+artifacts {
+	convertersJar(tasks.testConvertersJar)
+}
+
+a12Publish {
+	artifactType.set 'community'
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+		}
+	}
+}
+
+test {
+	useTestNG()
+}

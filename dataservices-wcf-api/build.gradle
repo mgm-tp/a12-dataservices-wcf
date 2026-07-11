@@ -1,0 +1,27 @@
+plugins {
+	id 'java-library'
+	id 'maven-publish'
+}
+
+dependencies {
+	api libs.mgmModelApi
+	api libs.commonsLang3
+	implementation libs.springContext
+	testImplementation libs.testng
+}
+
+a12Publish {
+	artifactType.set 'community'
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+		}
+	}
+}
+
+test {
+	useTestNG()
+}

@@ -1,0 +1,94 @@
+plugins {
+	alias(libs.plugins.springBoot)
+	alias(libs.plugins.lombokPlugin)
+	id 'java'
+	id 'maven-publish'
+}
+
+configurations {
+	testConverters {
+		canBeConsumed = false
+		canBeResolved = true
+	}
+}
+
+dependencies {
+	implementation project(':dataservices-wcf-core')
+	implementation libs.picocli
+	implementation libs.spring.boot.starter
+	implementation libs.semver4j
+	compileOnly libs.lombok
+	annotationProcessor libs.lombok
+	testImplementation libs.spring.boot.starter.test
+	testImplementation libs.testng
+	testImplementation libs.mockito
+	// Test-only converter fat-jar used to verify isolated converter loading.
+	testConverters project(path: ':dataservices-wcf-core', configuration: 'convertersJar')
+}
+
+sourceSets {
+	main {
+		resources {
+			srcDir(layout.buildDirectory.dir("generated-resources"))
+		}
+	}
+}
+
+def generateVersionProps = tasks.register('generateVersionProperties') {
+	description = 'Generates version.properties with the current project version.'
+	group = 'build'
+	def genDir = layout.buildDirectory.dir("generated-resources")
+	def projectVersion = provider { project.version } // lazy provider - resolves at execution time safely
+	outputs.file(genDir.map { it.file("version.properties") })
+	outputs.upToDateWhen { false }
+	doLast {
+		def dir = genDir.get().asFile
+		if (!dir.exists() && !dir.mkdirs()) {
+			throw new GradleException("Cannot create directory: $dir")
+		}
+		def versionFile = new File(dir, 'version.properties')
+		versionFile.text = "version=${projectVersion.get()}\n"
+	}
+}
+
+tasks.processResources.dependsOn(generateVersionProps)
+
+a12Publish {
+	artifactType.set 'community'
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+			artifact bootJar
+		}
+	}
+}
+
+test {
+	useTestNG()
+	def testConvertersJar = configurations.testConverters
+	inputs.files(testConvertersJar)
+	doFirst {
+		systemProperty 'wcf.test.convertersJar', testConvertersJar.singleFile.absolutePath
+	}
+}
+
+bootJar {
+	archiveClassifier.set('fatjar')
+	mainClass = 'com.mgmtp.a12.dataservices.wcf.WcfCli'
+	manifest {
+		attributes(
+			'Implementation-Version': project.version,
+			'Main-Class': 'org.springframework.boot.loader.launch.JarLauncher'
+		)
+	}
+	// The fat JAR bundles this module's THIRD_PARTY_NOTICES and license texts.
+	from(file('THIRD_PARTY_NOTICES')) {
+		into 'META-INF'
+	}
+	from(file('licenses')) {
+		into 'META-INF/licenses'
+	}
+}

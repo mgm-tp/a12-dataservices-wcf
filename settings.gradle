@@ -1,0 +1,3 @@
+include 'dataservices-wcf-api'
+include 'dataservices-wcf-core'
+include 'dataservices-wcf-cli'

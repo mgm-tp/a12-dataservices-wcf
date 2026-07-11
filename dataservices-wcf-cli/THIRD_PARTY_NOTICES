@@ -1,0 +1,226 @@
+THIRD_PARTY_NOTICES
+
+Component: A12 Dataservices - Workspace Conversion Framework CLI Tool
+Generated: 2026-06-24 for mgm A12 Platform 2026.06
+
+The mgm A12 Platform is developed by mgm technology partners GmbH.
+
+https://www.mgm-tp.com.
+
+This file lists third-party software components included in this
+distribution of the mgm A12 Platform and the licenses that apply
+to them.
+
+Component Overview
+-------------------
+
+The following third-party components are included in this distribution:
+
+
+- ch.qos.logback/logback-classic 1.5.32, licensed under EPL-1.0
+	Copyright (C) 1999-2024, QOS.ch
+	Source: https://github.com/qos-ch/logback/
+- ch.qos.logback/logback-core 1.5.32, licensed under EPL-1.0
+	Copyright (C) 1999-2024, QOS.ch
+	Source: https://github.com/qos-ch/logback/
+- com.fasterxml.jackson.core/jackson-annotations 2.21, licensed under Apache-2.0
+	Copyright 2007-, Tatu Saloranta (tatu.saloranta@iki.fi)
+	Source: https://github.com/FasterXML/jackson-annotations
+- com.mgmtp.a12.base/base-model-api 30.0.1, licensed under EUPL v1.2
+	Copyright (C) 2012-2026 mgm technology partners GmbH
+	Source: https://github.com/mgm-tp
+- com.mgmtp.a12.base/base-model-marshalling 30.0.1, licensed under EUPL v1.2
+	Copyright (C) 2012-2026 mgm technology partners GmbH
+	Source: https://github.com/mgm-tp
+- commons-logging/commons-logging 1.3.5, licensed under Apache-2.0
+	Copyright 2001-2026 The Apache Software Foundation
+	Source: https://github.com/apache/commons-logging
+- com.vdurmont/semver4j 3.1.0, licensed under MIT
+	Copyright (c) 2015-present Vincent DURMONT vdurmont@gmail.com
+	Source: https://github.com/vdurmont/semver4j
+- info.picocli/picocli 4.7.7, licensed under Apache-2.0
+	Copyright 2017 Remko Popma
+	Source: https://github.com/remkop/picocli
+- io.micrometer/micrometer-commons 1.16.5, licensed under Apache-2.0
+	Copyright (c) 2017-Present VMware, Inc. All Rights Reserved.
+	Source: https://github.com/micrometer-metrics/micrometer
+- io.micrometer/micrometer-observation 1.16.5, licensed under Apache-2.0
+	Copyright (c) 2017-Present VMware, Inc. All Rights Reserved.
+	Source: https://github.com/micrometer-metrics/micrometer
+- jakarta.annotation/jakarta.annotation-api 3.0.0, licensed under EPL-2.0
+	Copyright (c) 2020 Oracle and/or its affiliates. All rights reserved.
+	Source: https://github.com/jakartaee/common-annotations-api
+- org.apache.commons/commons-lang3 3.20.0, licensed under Apache-2.0
+	Copyright 2001-2026 The Apache Software Foundation
+	Source: https://github.com/apache/commons-lang
+- org.apache.logging.log4j/log4j-api 2.25.4, licensed under Apache-2.0
+	Copyright 1999-2025 The Apache Software Foundation
+	Source: https://github.com/apache/logging-log4j2
+- org.apache.logging.log4j/log4j-to-slf4j 2.25.4, licensed under Apache-2.0
+	Copyright 1999-2025 The Apache Software Foundation
+	Source: https://github.com/apache/logging-log4j2
+- org.jspecify/jspecify 1.0.0, licensed under Apache-2.0
+	 Copyright 2022 The JSpecify Authors
+	Source: https://github.com/jspecify/jspecify
+- org.slf4j/jul-to-slf4j 2.0.17, licensed under MIT
+	Copyright (c) 2004-2022 QOS.ch Sarl (Switzerland)
+	Source: https://github.com/qos-ch/slf4j
+- org.slf4j/slf4j-api 2.0.17, licensed under MIT
+	Copyright (c) 2004-2022 QOS.ch Sarl (Switzerland)
+	Source: https://github.com/qos-ch/slf4j
+- org.springframework.boot/spring-boot 4.0.6, licensed under Apache-2.0
+	Copyright (c) 2012-2026 VMware, Inc.
+	Source: https://github.com/spring-projects/spring-boot
+- org.springframework.boot/spring-boot-autoconfigure 4.0.6, licensed under Apache-2.0
+	Copyright (c) 2012-2026 VMware, Inc.
+	Source: https://github.com/spring-projects/spring-boot
+- org.springframework.boot/spring-boot-starter 4.0.6, licensed under Apache-2.0
+	Copyright (c) 2012-2026 VMware, Inc.
+	Source: https://github.com/spring-projects/spring-boot
+- org.springframework.boot/spring-boot-starter-logging 4.0.6, licensed under Apache-2.0
+	Copyright (c) 2012-2026 VMware, Inc.
+	Source: https://github.com/spring-projects/spring-boot
+- org.springframework/spring-aop 7.0.7, licensed under Apache-2.0
+	Copyright 2002-present the original author or authors
+	Source: https://github.com/spring-projects/spring-framework
+- org.springframework/spring-beans 7.0.7, licensed under Apache-2.0
+	Copyright 2002-present the original author or authors
+	Source: https://github.com/spring-projects/spring-framework
+- org.springframework/spring-context 7.0.7, licensed under Apache-2.0
+	Copyright 2002-present the original author or authors
+	Source: https://github.com/spring-projects/spring-framework
+- org.springframework/spring-core 7.0.7, licensed under Apache-2.0
+	Copyright 2002-present the original author or authors
+	Source: https://github.com/spring-projects/spring-framework
+- org.springframework/spring-expression 7.0.7, licensed under Apache-2.0
+	Copyright 2002-present the original author or authors
+	Source: https://github.com/spring-projects/spring-framework
+- org.yaml/snakeyaml 2.5, licensed under Apache-2.0
+	Copyright (c) 2008, SnakeYAML
+	Source: https://bitbucket.org/snakeyaml/snakeyaml/src/snakeyaml-2.4/
+
+
+NOTICE file of commons-logging
+---------------------------
+
+Apache Commons Logging
+Copyright 2001-2026 The Apache Software Foundation
+
+This product includes software developed at
+The Apache Software Foundation (https://www.apache.org/).
+
+
+NOTICE file of io.micrometer
+---------------------------
+
+Micrometer
+
+Copyright (c) 2017-Present VMware, Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+-------------------------------------------------------------------------------
+
+This product contains a modified portion of 'io.netty.util.internal.logging',
+in the Netty/Common library distributed by The Netty Project:
+
+  * Copyright 2013 The Netty Project
+  * License: Apache License v2.0
+  * Homepage: https://netty.io
+
+This product contains a modified portion of 'StringUtils.isBlank()',
+in the Commons Lang library distributed by The Apache Software Foundation:
+
+  * Copyright 2001-2019 The Apache Software Foundation
+  * License: Apache License v2.0
+  * Homepage: https://commons.apache.org/proper/commons-lang/
+
+This product contains a modified portion of 'JsonUtf8Writer',
+in the Moshi library distributed by Square, Inc:
+
+  * Copyright 2010 Google Inc.
+  * License: Apache License v2.0
+  * Homepage: https://github.com/square/moshi
+
+This product contains a modified portion of the 'org.springframework.lang'
+package in the Spring Framework library, distributed by VMware, Inc:
+
+  * Copyright 2002-2019 the original author or authors.
+  * License: Apache License v2.0
+  * Homepage: https://spring.io/projects/spring-framework
+
+
+NOTICE file of org.apache.commons
+---------------------------
+
+Apache Commons Lang
+Copyright 2001-2026 The Apache Software Foundation
+
+This product includes software developed at
+The Apache Software Foundation (https://www.apache.org/).
+
+
+NOTICE file of org.apache.logging.log4j
+---------------------------
+
+Apache Log4j
+Copyright 1999-2024 Apache Software Foundation
+
+This product includes software developed at
+The Apache Software Foundation (http://www.apache.org/).
+
+ResolverUtil.java
+Copyright 2005-2006 Tim Fennell
+
+Dumbster SMTP test server
+Copyright 2004 Jason Paul Kitchen
+
+TypeUtil.java
+Copyright 2002-2012 Ramnivas Laddad, Juergen Hoeller, Chris Beams
+
+picocli (http://picocli.info)
+Copyright 2017 Remko Popma
+
+TimeoutBlockingWaitStrategy.java and parts of Util.java
+Copyright 2011 LMAX Ltd.
+
+
+NOTICE file of org.springframework.boot
+---------------------------
+
+Spring Boot ${version}
+Copyright (c) 2012-2026 VMware, Inc.
+
+This product is licensed to you under the Apache License, Version 2.0
+(the "License"). You may not use this product except in compliance with
+the License.
+
+
+License Texts
+-------------
+
+Complete license texts for all included third-party components can
+be found in the licenses/ directory, attributions in file NOTICES.
+
+
+General Notice
+--------------
+
+The mgm A12 Platform is dual-licensed under the EUPL-1.2 or a
+commercial license. Third-party components remain under their
+respective licenses. For details, see the file LICENSE.
+"mgm A12" is a registered trademark of mgm technology partners GmbH
+(EU/DE). All other trademarks are the property of their respective
+owners.
+
+End of THIRD_PARTY_NOTICES
