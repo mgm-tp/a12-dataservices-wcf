@@ -143,6 +143,28 @@ Injection:
 WorkspaceConversionService service;
 ```
 
+## Library / Embedded Usage
+
+When WCF is consumed as a library (converters already on the launch classpath as ordinary
+dependencies), use the supported programmatic entry point instead of hand-rolling a
+`@SpringBootApplication`:
+
+```java
+import com.mgmtp.a12.dataservices.wcf.WcfRunner;
+
+WcfRunner.run(inputWorkspaceDir, outputSeedDataDir);
+```
+
+`WcfRunner` owns the Spring bootstrap: it boots a non-web context, component-scans
+`com.mgmtp.a12` so that `@WcfConverter` converters on the classpath are discovered, applies
+the WCF auto-configuration for the default beans, runs the pipeline, and closes the context.
+Relative paths are resolved against the current working directory and the output directory is
+created if missing.
+
+This is the recommended path for embedding WCF (e.g. running it in a forked JVM from a build
+plugin). No external converters JAR (`-c`) is involved — converters are discovered the normal
+way via component scan.
+
 ## Writing a Converter
 
 ```java
@@ -260,6 +282,7 @@ Notes:
 - Relative paths resolved against current working directory (CWD unchanged by launcher).
 - Each converter jar is loaded in an **isolated** class loader + child Spring context (not appended to the host classpath). See [Converter Modules — Best Practices](#converter-modules--best-practices).
 - `-c` is repeatable to load several modules: `-c a.jar -c b.jar`.
+- `-c` is **optional**. Omit it when converters are already on the launch classpath (library mode); the CLI delegates to `WcfRunner` and skips the isolated-loader path entirely.
 
 ## Test Converters Bundle
 

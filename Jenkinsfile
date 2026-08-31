@@ -76,5 +76,35 @@ pipeline {
 				}
 			}
 		}
+
+		stage('Commit and tag release') {
+			when { expression { env.BUILD_TYPE == 'RELEASE' && params.VERSION && !params.DRY_RUN } }
+			steps {
+				sshagent(credentials: ['ci-user-ssh']) {
+					sh "git add gradle.properties"
+					sh "git commit -m 'NEW_VERSION: ${params.VERSION}'"
+					sh "git tag 'A12-${params.VERSION}' -m 'A12-${params.VERSION} Tag'"
+					sh "git push origin 'A12-${params.VERSION}'"
+				}
+			}
+		}
+
+		stage('Bump to next version') {
+			when { expression { env.BUILD_TYPE == 'RELEASE' && params.NEXT_VERSION && !params.DRY_RUN } }
+			steps {
+				sshagent(credentials: ['ci-user-ssh']) {
+					configFileProvider([configFile(fileId: 'gradle-settings', targetLocation: "${env.WORKSPACE}/.gradle/init.d/settings.gradle")]) {
+						script {
+							def branchName = params.BRANCH ?: 'master'
+							sh "git checkout ${branchName}"
+							sh "gradle setVersion -Pversion=${params.NEXT_VERSION}${params.FULL_LOG ? ' -i -s' : ''}"
+							sh "git add gradle.properties"
+							sh "git commit -m 'Set next version: ${params.NEXT_VERSION}'"
+							sh "git push -u origin '${branchName}'"
+						}
+					}
+				}
+			}
+		}
 	}
 }

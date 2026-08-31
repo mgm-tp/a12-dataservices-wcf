@@ -67,7 +67,8 @@ public class WcfCli implements Runnable {
 
 	@CommandLine.Option(names = { "-c", "--converters" }, arity = "1", paramLabel = "CONVERTERS_JAR",
 		description = "Path to a flat converter fat-jar (shadow/uber or plain jar) bundling WorkspaceConverters "
-			+ "and their dependencies. Repeatable; each jar is loaded in an isolated class loader.")
+			+ "and their dependencies. Repeatable; each jar is loaded in an isolated class loader. "
+			+ "Optional: omit when converters are already on the launch classpath (library mode).")
 	private List<Path> convertersJars = new ArrayList<>();
 
 	/**
@@ -100,17 +101,18 @@ public class WcfCli implements Runnable {
 			Files.createDirectories(seedDataDir);
 
 			if (convertersJars.isEmpty()) {
-				throw new CommandLine.ParameterException(new CommandLine(this),
-					"At least one converter jar must be provided via -c/--converters");
-			}
-			for (Path jar : convertersJars) {
-				if (!Files.isRegularFile(jar)) {
-					throw new CommandLine.ParameterException(new CommandLine(this),
-						"Converter jar does not exist or is not a file: " + jar);
+				// Library mode: converters are already on the launch classpath and are discovered
+				// via component scan. Delegate to the supported core entry point.
+				WcfRunner.run(workspaceDir, seedDataDir);
+			} else {
+				for (Path jar : convertersJars) {
+					if (!Files.isRegularFile(jar)) {
+						throw new CommandLine.ParameterException(new CommandLine(this),
+							"Converter jar does not exist or is not a file: " + jar);
+					}
 				}
+				convert();
 			}
-
-			convert();
 			System.out.println("Conversion finished. Output: " + seedDataDir);
 		} catch (Exception e) {
 			System.err.println("Conversion failed: " + e.getMessage());

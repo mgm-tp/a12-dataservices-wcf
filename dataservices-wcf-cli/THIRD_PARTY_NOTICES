@@ -1,7 +1,7 @@
 THIRD_PARTY_NOTICES
 
-Component: A12 Dataservices - Workspace Conversion Framework CLI Tool
-Generated: 2026-06-24 for mgm A12 Platform 2026.06
+Component: A12 Data Services - Workspace Conversion Framework CLI Tool
+Generated: 2026-08-17 for mgm A12 Platform 2026.06
 
 The mgm A12 Platform is developed by mgm technology partners GmbH.
 
@@ -16,28 +16,24 @@ Component Overview
 
 The following third-party components are included in this distribution:
 
-
 - ch.qos.logback/logback-classic 1.5.32, licensed under EPL-1.0
 	Copyright (C) 1999-2024, QOS.ch
 	Source: https://github.com/qos-ch/logback/
-- ch.qos.logback/logback-core 1.5.32, licensed under EPL-1.0
+- ch.qos.logback/logback-core 1.5.32, licensed under EPL-2.0
 	Copyright (C) 1999-2024, QOS.ch
 	Source: https://github.com/qos-ch/logback/
-- com.fasterxml.jackson.core/jackson-annotations 2.21, licensed under Apache-2.0
+- com.fasterxml.jackson.core/jackson-annotations 2.22, licensed under Apache-2.0
 	Copyright 2007-, Tatu Saloranta (tatu.saloranta@iki.fi)
 	Source: https://github.com/FasterXML/jackson-annotations
-- com.mgmtp.a12.base/base-model-api 30.0.1, licensed under EUPL v1.2
+- com.mgmtp.a12.base/base-model-api 30.0.2, licensed under EUPL v1.2
 	Copyright (C) 2012-2026 mgm technology partners GmbH
 	Source: https://github.com/mgm-tp
-- com.mgmtp.a12.base/base-model-marshalling 30.0.1, licensed under EUPL v1.2
-	Copyright (C) 2012-2026 mgm technology partners GmbH
-	Source: https://github.com/mgm-tp
-- commons-logging/commons-logging 1.3.5, licensed under Apache-2.0
-	Copyright 2001-2026 The Apache Software Foundation
-	Source: https://github.com/apache/commons-logging
 - com.vdurmont/semver4j 3.1.0, licensed under MIT
 	Copyright (c) 2015-present Vincent DURMONT vdurmont@gmail.com
 	Source: https://github.com/vdurmont/semver4j
+- commons-logging/commons-logging 1.3.5, licensed under Apache-2.0
+	Copyright 2001-2026 The Apache Software Foundation
+	Source: https://github.com/apache/commons-logging
 - info.picocli/picocli 4.7.7, licensed under Apache-2.0
 	Copyright 2017 Remko Popma
 	Source: https://github.com/remkop/picocli
@@ -60,7 +56,7 @@ The following third-party components are included in this distribution:
 	Copyright 1999-2025 The Apache Software Foundation
 	Source: https://github.com/apache/logging-log4j2
 - org.jspecify/jspecify 1.0.0, licensed under Apache-2.0
-	 Copyright 2022 The JSpecify Authors
+	Copyright 2022 The JSpecify Authors
 	Source: https://github.com/jspecify/jspecify
 - org.slf4j/jul-to-slf4j 2.0.17, licensed under MIT
 	Copyright (c) 2004-2022 QOS.ch Sarl (Switzerland)
@@ -69,16 +65,16 @@ The following third-party components are included in this distribution:
 	Copyright (c) 2004-2022 QOS.ch Sarl (Switzerland)
 	Source: https://github.com/qos-ch/slf4j
 - org.springframework.boot/spring-boot 4.0.6, licensed under Apache-2.0
-	Copyright (c) 2012-2026 VMware, Inc.
+	Copyright 2012-present the original author or authors.
 	Source: https://github.com/spring-projects/spring-boot
 - org.springframework.boot/spring-boot-autoconfigure 4.0.6, licensed under Apache-2.0
-	Copyright (c) 2012-2026 VMware, Inc.
+	Copyright 2012-present the original author or authors.
 	Source: https://github.com/spring-projects/spring-boot
 - org.springframework.boot/spring-boot-starter 4.0.6, licensed under Apache-2.0
-	Copyright (c) 2012-2026 VMware, Inc.
+	Copyright 2012-present the original author or authors.
 	Source: https://github.com/spring-projects/spring-boot
 - org.springframework.boot/spring-boot-starter-logging 4.0.6, licensed under Apache-2.0
-	Copyright (c) 2012-2026 VMware, Inc.
+	Copyright 2012-present the original author or authors.
 	Source: https://github.com/spring-projects/spring-boot
 - org.springframework/spring-aop 7.0.7, licensed under Apache-2.0
 	Copyright 2002-present the original author or authors
@@ -98,7 +94,18 @@ The following third-party components are included in this distribution:
 - org.yaml/snakeyaml 2.5, licensed under Apache-2.0
 	Copyright (c) 2008, SnakeYAML
 	Source: https://bitbucket.org/snakeyaml/snakeyaml/src/snakeyaml-2.4/
+- tools.jackson.core/jackson-core 3.2.1, licensed under Apache-2.0
+	Copyright 2007-, Tatu Saloranta (tatu.saloranta@iki.fi)
+	Source: https://github.com/FasterXML/jackson-core
+- tools.jackson.core/jackson-databind 3.2.1, licensed under Apache-2.0
+	Copyright 2007-, Tatu Saloranta (tatu.saloranta@iki.fi)
+	Source: https://github.com/FasterXML/jackson-databind
+- tools.jackson/jackson-bom 3.2.1, licensed under Apache-2.0
+	Source: https://github.com/FasterXML/jackson-bom
 
+
+Embedded NOTICE Files
+---------------------
 
 NOTICE file of commons-logging
 ---------------------------
@@ -224,3 +231,4 @@ respective licenses. For details, see the file LICENSE.
 owners.
 
 End of THIRD_PARTY_NOTICES
+

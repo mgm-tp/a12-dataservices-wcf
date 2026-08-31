@@ -47,8 +47,10 @@ public interface WorkspaceConversionService {
 	/**
 	 * Executes the full conversion pipeline for the given workspace.
 	 *
-	 * @param workspaceLocation input directory containing source files and models
-	 * @param seedDataPath destination root where resulting models and supplemental files are stored
+	 * @param workspaceLocation input directory containing source files and models (must exist and be a directory); relative paths are resolved against the current working directory
+	 * @param seedDataPath destination root where resulting models and supplemental files are stored (created if missing); relative paths are resolved against the current working directory
+	 * @throws IllegalArgumentException if either argument is null, or if the input workspace directory does not exist or is not a directory
+	 * @throws java.io.UncheckedIOException if the output directory cannot be created
 	 */
 	void process(Path workspaceLocation, Path seedDataPath);
 }

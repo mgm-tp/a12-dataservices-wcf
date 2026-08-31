@@ -1,9 +1,15 @@
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+
 plugins {
 	alias libs.plugins.lombokPlugin apply false
 	alias libs.plugins.verPlugin
 	alias libs.plugins.catalogUpdatePlugin
 	alias libs.plugins.spotlessPlugin
 	alias libs.plugins.a12Publish
+	alias libs.plugins.devtools.thirdPartyNotices
 }
 
 allprojects { Project subProject ->
@@ -51,7 +57,113 @@ subprojects {
 	}
 }
 
-tasks.register('setVersion', Exec) {
+TaskProvider<Exec> setVersionTask = tasks.register('setVersion', Exec) {
 	executable 'sed'
-	args '-i', "s/^ *version *= *.*\$/version=${version}/", 'gradle.properties'
+	doFirst {
+		args '-i' , "s/^ *version *= *.*\$/version=${version}/" , 'gradle.properties'
+	}
+}
+
+tasks.register('prepareForIntegration') {
+	group = 'integration'
+	description = 'Updates A12 dependency versions in the version catalog and prints the component build version'
+	doLast {
+		def versionMapping = [
+				'base': 'a12BaseVersion',
+		]
+
+		String depVersions = project.findProperty('a12DependencyVersions') ?: ''
+		if (depVersions) {
+			def versions = [:]
+			depVersions.split(',').each { entry ->
+				def parts = entry.split('=', 2)
+				if (parts.length == 2) {
+					def component = parts[0].trim()
+					def tomlKey = versionMapping[component]
+					if (tomlKey) {
+						versions[tomlKey] = parts[1].trim()
+					} else {
+						logger.warn("Unknown A12 component '${component}' in a12DependencyVersions, skipping.")
+					}
+				}
+			}
+
+			def tomlFile = file('gradle/libs.versions.toml')
+			def lines = tomlFile.readLines()
+			def updatedLines = lines.collect { line ->
+				versions.each { tomlKey, newVersion ->
+					if (line =~ /^\s*${tomlKey}\s*=\s*"/) {
+						line = "${tomlKey} = \"${newVersion}\""
+					}
+				}
+				line
+			}
+			tomlFile.text = updatedLines.join('\n') + '\n'
+		}
+
+		// Strip any pre-release suffix from the version (e.g., -SNAPSHOT, -dev, -rc)
+		String buildDate = DateTimeFormatter.ofPattern("yyyyMMddHHmmss").withZone(ZoneOffset.UTC).format(Instant.now())
+		project.version = project.version.toString().replaceAll(/-.*/, "-build.${buildDate}")
+		println project.version
+	}
+	finalizedBy setVersionTask
+}
+
+tasks.register('buildAndTestForIntegration') {
+	group = 'integration'
+	description = 'Builds the project and runs unit and integration tests for the integration build'
+	project.allprojects.each { proj ->
+		if (proj.tasks.names.contains('assemble')) {
+			dependsOn proj.tasks.named('assemble')
+		}
+	}
+}
+
+tasks.register('publishForIntegration') {
+	group = 'integration'
+	description = 'Publishes Maven artifacts for the integration build'
+	project.allprojects.each { proj ->
+		if (proj.tasks.names.contains('publish')) {
+			dependsOn proj.tasks.named('publish')
+		}
+	}
+}
+
+// ---------------------------------------------------------------------------
+// THIRD_PARTY_NOTICES generation
+// ---------------------------------------------------------------------------
+
+thirdPartyNotices {
+    releaseLine.set(project.property("a12publish.releaseLine") as String)
+    // for usage of a local metadata excel file
+    // metadataFile.set(file("/home/mschoene/A12/Licensing/metadata-export.xlsx"))
+    
+    // to use the API as metadata source (uncomment to use excel file)
+    metadataSource.set(com.mgmtp.a12.devtools.gradle.plugins.thirdpartynotices.MetadataSource.API)
+    apiBaseUrl.set("https://deps-data.a12appfactory-cluster.mgm-tp.com")
+    
+    notices {
+        register("main") {
+            componentName.set("Data Services - Workspace Conversion Framework")
+            projectPaths.set(rootProject.subprojects.collect { it.path })
+            failOnMissingConfiguration.set(false)
+            failOnMissingMetadata.set(true)
+
+			// required for fat JAR: true, otherwise false
+			includeTransitiveDependencies.set(false) // true only for fat JARs
+
+            // extra dependencies
+            extraMavenDependencies.add("org.gradle:gradle-wrapper:${gradle.gradleVersion}")
+        }
+		register("WcfCli") {
+            componentName.set("Data Services - Workspace Conversion Framework CLI Tool")
+			outputFile.set(rootProject.file("dataservices-wcf-cli/THIRD_PARTY_NOTICES"))
+            projectPaths.set([":dataservices-wcf-cli"])
+            failOnMissingConfiguration.set(false)
+            failOnMissingMetadata.set(true)
+            
+			// required for fat JAR: true, otherwise false
+			includeTransitiveDependencies.set(true) // true only for fat JARs
+        }
+    }
 }

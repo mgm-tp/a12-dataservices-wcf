@@ -36,6 +36,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
 import com.mgmtp.a12.dataservices.wcf.domain.FileTuple;
@@ -44,6 +45,7 @@ import com.mgmtp.a12.dataservices.wcf.domain.Workspace;
 import com.mgmtp.a12.dataservices.wcf.WorkspaceFactory;
 import com.mgmtp.a12.model.header.Header;
 import com.mgmtp.a12.model.header.HeaderParser;
+import com.mgmtp.a12.wcf.testfixtures.TempDirs;
 
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.eq;
@@ -55,8 +57,15 @@ import static org.testng.Assert.assertTrue;
 
 public class DefaultWorkspaceSupplierTest {
 
+	private final TempDirs tempDirs = new TempDirs();
+
+	@AfterMethod(alwaysRun = true)
+	public void cleanup() {
+		tempDirs.cleanup();
+	}
+
 	@Test public void loadsModelJson() throws Exception {
-		Path dir = Files.createTempDirectory("ws");
+		Path dir = tempDirs.create("ws");
 		Path json = dir.resolve("sample.json");
 		Files.writeString(json, "{\"id\":\"m1\"}");
 

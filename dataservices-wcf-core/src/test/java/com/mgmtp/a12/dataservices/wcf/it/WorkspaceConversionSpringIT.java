@@ -38,11 +38,13 @@ import java.nio.file.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
 import com.mgmtp.a12.dataservices.wcf.WorkspaceConversionService;
 import com.mgmtp.a12.dataservices.wcf.internal.OutputConflictException;
 import com.mgmtp.a12.dataservices.wcf.it.converters.TestHeader;
+import com.mgmtp.a12.wcf.testfixtures.TempDirs;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -58,12 +60,19 @@ public class WorkspaceConversionSpringIT extends AbstractTestNGSpringContextTest
 
 	@Autowired private WorkspaceConversionService conversionService;
 
+	private final TempDirs tempDirs = new TempDirs();
+
+	@AfterMethod(alwaysRun = true)
+	public void cleanup() {
+		tempDirs.cleanup();
+	}
+
 	/**
 	 * Successful pipeline run – two converters modify and extend the workspace.
 	 */
 	@Test public void fullPipelineSuccess() throws Exception {
-		Path wsDir = Files.createTempDirectory("it-spring-ws");
-		Path seedDir = Files.createTempDirectory("it-spring-seed");
+		Path wsDir = tempDirs.create("it-spring-ws");
+		Path seedDir = tempDirs.create("it-spring-seed");
 		prepareWorkspace(wsDir, seedDir);
 
 		conversionService.process(wsDir, seedDir);
@@ -95,10 +104,10 @@ public class WorkspaceConversionSpringIT extends AbstractTestNGSpringContextTest
 	 */
 	@Test(expectedExceptions = RuntimeException.class, expectedExceptionsMessageRegExp = "Unable to store model model1")
 	public void failsOnExistingModel() throws Exception {
-		Path wsDir = Files.createTempDirectory("it-spring-ws-conflict");
+		Path wsDir = tempDirs.create("it-spring-ws-conflict");
 		Files.writeString(wsDir.resolve("model1.json"), ModelUtils.createValidModel(TestHeader.builder().id("model1").build(), "{\"value\":2}"));
 
-		Path seedDir = Files.createTempDirectory("it-spring-seed-conflict");
+		Path seedDir = tempDirs.create("it-spring-seed-conflict");
 
 		logPaths(wsDir, seedDir);
 
@@ -112,10 +121,10 @@ public class WorkspaceConversionSpringIT extends AbstractTestNGSpringContextTest
 	/**
 	 * Conflict scenario – target model1.json already exists, expecting an exception.
 	 */
-	@Test(expectedExceptions = OutputConflictException.class, expectedExceptionsMessageRegExp = "Unable to store file .*/generated/info.txt")
+	@Test(expectedExceptions = OutputConflictException.class, expectedExceptionsMessageRegExp = "Unable to store file .*[/\\\\]generated[/\\\\]info\\.txt")
 	public void failsOnExistingFileContent() throws Exception {
-		Path wsDir = Files.createTempDirectory("it-spring-ws-conflict");
-		Path seedDir = Files.createTempDirectory("it-spring-seed-conflict");
+		Path wsDir = tempDirs.create("it-spring-ws-conflict");
+		Path seedDir = tempDirs.create("it-spring-seed-conflict");
 		prepareWorkspace(wsDir, seedDir);
 
 		Path conflictingFile = seedDir.resolve("generated/info.txt");
@@ -128,10 +137,10 @@ public class WorkspaceConversionSpringIT extends AbstractTestNGSpringContextTest
 	/**
 	 * Conflict scenario – target model1.json already exists, expecting an exception.
 	 */
-	@Test(expectedExceptions = OutputConflictException.class, expectedExceptionsMessageRegExp = "Unable to store file .*/moved.txt")
+	@Test(expectedExceptions = OutputConflictException.class, expectedExceptionsMessageRegExp = "Unable to store file .*[/\\\\]moved\\.txt")
 	public void failsOnExistingFilePath() throws Exception {
-		Path wsDir = Files.createTempDirectory("it-spring-ws-conflict");
-		Path seedDir = Files.createTempDirectory("it-spring-seed-conflict");
+		Path wsDir = tempDirs.create("it-spring-ws-conflict");
+		Path seedDir = tempDirs.create("it-spring-seed-conflict");
 		prepareWorkspace(wsDir, seedDir);
 
 		Path conflictingFile = seedDir.resolve("moved.txt");

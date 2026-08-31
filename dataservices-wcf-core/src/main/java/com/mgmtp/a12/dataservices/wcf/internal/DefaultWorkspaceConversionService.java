@@ -31,6 +31,9 @@
  */
 package com.mgmtp.a12.dataservices.wcf.internal;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -42,6 +45,13 @@ import com.mgmtp.a12.dataservices.wcf.domain.Workspace;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Default implementation of {@link WorkspaceConversionService}.
+ *
+ * Validates and normalizes input paths, then loads the workspace via {@link IWorkspaceSupplier},
+ * applies each registered {@link WorkspaceConverter} in order, and writes the result via
+ * {@link IWorkspaceConsumer}.
+ */
 @RequiredArgsConstructor
 public class DefaultWorkspaceConversionService implements WorkspaceConversionService {
 
@@ -50,6 +60,23 @@ public class DefaultWorkspaceConversionService implements WorkspaceConversionSer
 	private final IWorkspaceConsumer workspaceConsumer;
 
 	@Override public void process(Path workspaceLocation, Path seedDataPath) {
+		if (workspaceLocation == null) {
+			throw new IllegalArgumentException("workspaceLocation must not be null");
+		}
+		if (seedDataPath == null) {
+			throw new IllegalArgumentException("seedDataPath must not be null");
+		}
+		workspaceLocation = normalize(workspaceLocation);
+		seedDataPath = normalize(seedDataPath);
+		if (!Files.isDirectory(workspaceLocation)) {
+			throw new IllegalArgumentException(
+				"Input workspace directory does not exist or is not a directory: " + workspaceLocation);
+		}
+		try {
+			Files.createDirectories(seedDataPath);
+		} catch (IOException e) {
+			throw new UncheckedIOException("Unable to create output seed data directory: " + seedDataPath, e);
+		}
 		Workspace ws = workspaceSupplier.get(workspaceLocation);
 		for (WorkspaceConverter converter : converters) {
 			ws = convertWithModuleClassLoader(converter, ws);
@@ -58,6 +85,14 @@ public class DefaultWorkspaceConversionService implements WorkspaceConversionSer
 			}
 		}
 		workspaceConsumer.accept(ws, seedDataPath);
+	}
+
+	private static Path normalize(Path path) {
+		if (path.isAbsolute()) {
+			return path.normalize();
+		}
+		Path cwd = Path.of("").toAbsolutePath().normalize();
+		return cwd.resolve(path).normalize();
 	}
 
 	/**

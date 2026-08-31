@@ -37,11 +37,13 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
 import com.mgmtp.a12.dataservices.wcf.domain.FileTuple;
 import com.mgmtp.a12.dataservices.wcf.domain.ModelTuple;
 import com.mgmtp.a12.dataservices.wcf.domain.Workspace;
+import com.mgmtp.a12.wcf.testfixtures.TempDirs;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -49,6 +51,13 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 public class DefaultWorkspaceConsumerTest {
+
+	private final TempDirs tempDirs = new TempDirs();
+
+	@AfterMethod(alwaysRun = true)
+	public void cleanup() {
+		tempDirs.cleanup();
+	}
 
 	@Test public void writesModelsAndFiles() throws Exception {
 		Workspace ws = mock(Workspace.class);
@@ -67,9 +76,9 @@ public class DefaultWorkspaceConsumerTest {
 		Map<String, FileTuple> files = new HashMap<>();
 		files.put("ignoredKey", fileTuple);
 		when(ws.getFiles()).thenReturn(files);
-		when(ws.getInputDir()).thenReturn(Files.createTempDirectory("inputDir").toString());
+		when(ws.getInputDir()).thenReturn(tempDirs.create("inputDir").toString());
 
-		Path seed = Files.createTempDirectory("seed");
+		Path seed = tempDirs.create("seed");
 		new DefaultWorkspaceConsumer().accept(ws, seed);
 
 		// Assert model file

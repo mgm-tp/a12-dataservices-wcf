@@ -1,5 +1,5 @@
 [versions]
-a12BaseVersion = "30.0.1"
+a12BaseVersion = "30.0.2"
 commonsLang3Version = "3.20.0"
 lombokPluginVersion = "8.14"
 lombokVersion = "1.18.42"
@@ -11,6 +11,7 @@ picocliVersion = "4.7.7"
 semver4jVersion = "3.1.0" # added
 mockitoVersion = "5.21.0"
 spotlessPluginVersion = "8.2.1"
+thirdPartyNoticesPlugin = "0.2.12"
 
 [libraries]
 commonsLang3 = { group = "org.apache.commons", name = "commons-lang3", version.ref = "commonsLang3Version" }
@@ -31,3 +32,4 @@ lombokPlugin = { id = "io.freefair.lombok", version.ref = "lombokPluginVersion" 
 verPlugin = { id = "com.github.ben-manes.versions", version.ref = "verPluginVersion" }
 springBoot = { id = "org.springframework.boot", version.ref = "springbootVersion" }
 spotlessPlugin = { id = "com.diffplug.spotless", version.ref = "spotlessPluginVersion" }
+devtools-thirdPartyNotices = { id = "com.mgmtp.a12.devtools.plugins.third-party-notices", version.ref = "thirdPartyNoticesPlugin" }
